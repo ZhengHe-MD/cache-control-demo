@@ -1,0 +1,17 @@
+{
+  "name": "cache-control-demo",
+  "version": "1.0.0",
+  "description": "demo for cache control",
+  "main": "index.js",
+  "author": "Zheng He <zhenghe@madadata.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev:start": "nodemon index"
+  },
+  "dependencies": {
+    "morgan": "^1.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
