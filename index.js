@@ -18,6 +18,34 @@ const server = http.createServer((req, res) => {
   })
 })
 
+function handleRequest(req, res) {
+  const reqMethod = req.method
+  const reqUrl = req.url
+  const pathname = url.parse(reqUrl).pathname
+
+  pathnameToHandler = {
+    '/no-store': handleNoStore,
+    '/no-cache': handleNoCache,
+    '/zero-max-age': handleZeroMaxAge,
+    '/positive-max-age': handlePositiveMaxAge,
+    '/last-modified': handleLastModified,
+    '/example-1': handleExample1,
+    '/example-2': handleExample2
+  }
+
+  const handler = pathnameToHandler[pathname]
+  if (!!handler) {
+    handler(req, res)
+  } else {
+    res.statusCode = 404
+    res.end('page no found')
+  }
+}
+
+server.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`)
+})
+
 function handleNoStore(req, res) {
   // open chrome://cache. nothing found
   res.statusCode = 200
@@ -96,31 +124,3 @@ function handleExample2(req, res) {
   res.setHeader('Cache-Control', 'max-age=86400, public')
   res.end('example 2')
 }
-
-function handleRequest(req, res) {
-  const reqMethod = req.method
-  const reqUrl = req.url
-  const pathname = url.parse(reqUrl).pathname
-
-  pathnameToHandler = {
-    '/no-store': handleNoStore,
-    '/no-cache': handleNoCache,
-    '/zero-max-age': handleZeroMaxAge,
-    '/positive-max-age': handlePositiveMaxAge,
-    '/last-modified': handleLastModified,
-    '/example-1': handleExample1,
-    '/example-2': handleExample2
-  }
-
-  const handler = pathnameToHandler[pathname]
-  if (!!handler) {
-    handler(req, res)
-  } else {
-    res.statusCode = 404
-    res.end('page no found')
-  }
-}
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`)
-})
